@@ -9,7 +9,7 @@ function App() {
   const getResultsFromDb = async () => {
     try {
       const results = await fetch(
-        `http://localhost:3001/api/recipes/${searchTerm}`,
+        `http://localhost:3001/api/search/${searchTerm}`,
         { method: "GET" }
       ).then((data) => data.json());
 
