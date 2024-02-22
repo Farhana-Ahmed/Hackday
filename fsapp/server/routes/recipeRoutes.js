@@ -6,7 +6,7 @@ const axios = require("axios");
 const itemModel = require("../models/itemModel");
 const API_KEY = process.env.API_KEY;
 const { fetchRecipes } = require("../utils/apiUtils");
-
+//getting all the recipes api call
 router.get("/recipes/:title", async (req, res) => {
   try {
     const options = {
@@ -47,4 +47,20 @@ router.get("/recipes/:title", async (req, res) => {
   }
 });
 
+//search endpoint
+router.get("/search/:query", async (req, res) => {
+  try {
+    const searchQuery = req.params.query;
+
+    const items = await itemModel.find({
+      title: { $regex: new RegExp(searchQuery, "i") },
+    });
+
+    // console.log("DB DATA", i);
+    res.send(items);
+  } catch (err) {
+    console.log(err);
+    res.status(500).send("Internal server error");
+  }
+});
 module.exports = router;
