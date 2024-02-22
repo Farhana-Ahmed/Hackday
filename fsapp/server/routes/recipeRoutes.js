@@ -5,6 +5,7 @@ require("dotenv").config();
 const axios = require("axios");
 const itemModel = require("../models/itemModel");
 const API_KEY = process.env.API_KEY;
+const UNSPLASH_KEY = process.env.UNSPLASH_KEY;
 const { fetchRecipes } = require("../utils/apiUtils");
 //getting all the recipes api call
 router.get("/recipes/", async (req, res) => {
@@ -22,23 +23,27 @@ router.get("/recipes/", async (req, res) => {
     const { query } = options.params;
 
     const response = await fetchRecipes(options);
-    for (let i = 0; i < response.data.length; i++) {
-      let item = new itemModel({
-        title: response.data[i].title,
-        ingredients: response.data[i].ingredients,
-        servings: response.data[i].servings,
-        instructions: response.data[i].instructions,
+
+    const savedItems = response.data.map(async (recipe) => {
+      const item = new itemModel({
+        title: recipe.title,
+        ingredients: recipe.ingredients,
+        instructions: recipe.instructions,
+        servings: recipe.servings,
       });
+
       if (!item.title.includes(query)) {
         try {
-          const savedItem = await item.save();
-          // console.log("Item savec", savedItem);
+          const savedRecipe = await item.save();
+          console.log("Item saced");
         } catch (error) {
-          console.log("error saving item", error);
+          console.log("error saving recipe", error);
         }
       }
-    }
-    //fetching all items from DB
+    });
+
+    await Promise.all(savedItems);
+
     const items = await itemModel.find({});
     res.send(items);
   } catch (error) {
@@ -48,18 +53,35 @@ router.get("/recipes/", async (req, res) => {
 });
 
 //search endpoint
-router.get("/search/:query", async (req, res) => {
+router.get("/search/:title", async (req, res) => {
   try {
-    const searchQuery = req.params.query;
+    const searchQuery = req.params.title;
 
-    const items = await itemModel.find({
+    const recipes = await itemModel.find({
       title: { $regex: new RegExp(searchQuery, "i") },
     });
 
-    res.send(items);
+    // const recipesWithImages = await Promise.all(
+    //   recipes.map(async (recipe) => {
+    //     const imageRes = await axios.get(
+    //       `https://api.unsplash.com/photos/random?query=${recipe.title}&count=1&client_id=${UNSPLASH_KEY}`
+    //     );
+
+    //     const imageUrl =
+    //       imageRes.data[0].urls.regular ||
+    //       "https://image.shutterstock.com/image-photo/notepad-your-recipe-herbs-spices-260nw-370298699.jpg";
+
+    //     return {
+    //       ...recipe.toObject(),
+    //       imageUrl,
+    //     };
+    //   })
+    // );
+
+    res.send(recipes);
   } catch (err) {
     console.log(err);
-    res.status(500).send("Internal server error");
+    res.status(500).json({ error: "Internal server error" });
   }
 });
 

@@ -39,3 +39,22 @@
 .recipe-card-body {
   padding: 1.2em;
 }
+
+@media screen and (max-width: 600px) {
+  .recipe-card {
+    width: 100%;
+    border-radius: 0;
+    margin: 0;
+  }
+
+  .recipe-card h2 {
+    font-size: 1.2em;
+  }
+}
+
+@media screen and (max-width: 1024px) {
+  .recipe-card {
+    width: 48%;
+    margin: 4%;
+  }
+}

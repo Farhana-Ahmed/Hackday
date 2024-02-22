@@ -8,22 +8,22 @@ function App() {
 
   const getResultsFromDb = async () => {
     try {
-      const results = await fetch(
-        `http://localhost:3001/api/search/${searchTerm}`,
-        { method: "GET" }
-      ).then((data) => data.json());
-
-      const recipesFound = results.filter((recipe) =>
-        recipe.title.toLowerCase().includes(searchTerm.toLowerCase())
+      const response = await fetch(
+        `http://localhost:3001/api/search/${searchTerm}`
       );
 
-      if (recipesFound.length > 0) {
-        console.log("search term is present");
-        setRecipes(recipesFound);
-      } else {
-        console.log("No matching recipe found");
-        setRecipes([]);
-      }
+      // const recipesFound = results.filter(async (recipe) =>
+      //   recipe.title.toLowerCase().includes(searchTerm.toLowerCase())
+      // );
+      const recipesWithImages = await response.json();
+      setRecipes(recipesWithImages);
+      // if (recipesFound.length > 0) {
+      //   console.log("search term is present");
+      //   setRecipes(recipesFound);
+      // } else {
+      //   console.log("No matching recipe found");
+      //   setRecipes([]);
+      // }
     } catch (error) {
       console.log("Error fetching data", error);
     }
