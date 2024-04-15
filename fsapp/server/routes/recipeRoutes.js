@@ -56,10 +56,35 @@ router.get("/recipes/", async (req, res) => {
 router.get("/search/:title", async (req, res) => {
   try {
     const searchQuery = req.params.title;
-
-    const recipes = await itemModel.find({
+    const page = parseInt(req.query.page) || 1;
+    const limit = 6;
+    const startIndex = (page - 1) * limit;
+    const endIndex = page * limit;
+    const totalItems = await itemModel.countDocuments({
       title: { $regex: new RegExp(searchQuery, "i") },
     });
+    const recipes = await itemModel
+      .find({
+        title: { $regex: new RegExp(searchQuery, "i") },
+      })
+      .limit(limit)
+      .skip(startIndex);
+
+    const pagination = {};
+
+    if (endIndex < totalItems) {
+      pagination.next = {
+        page: page + 1,
+        limit,
+      };
+    }
+
+    if (startIndex > 0) {
+      pagination.prev = {
+        page: page - 1,
+        limit,
+      };
+    }
 
     // const recipesWithImages = await Promise.all(
     //   recipes.map(async (recipe) => {
@@ -78,7 +103,7 @@ router.get("/search/:title", async (req, res) => {
     //   })
     // );
 
-    res.send(recipes);
+    res.json({ pagination, data: recipes });
   } catch (err) {
     console.log(err);
     res.status(500).json({ error: "Internal server error" });
@@ -88,6 +113,7 @@ router.get("/search/:title", async (req, res) => {
 //posting a new recipe
 
 router.post("/recipes", async (req, res) => {
+  console.log("THIS IS GETTING HIT");
   try {
     const { title, ingredients, servings, instructions } = req.body;
 
