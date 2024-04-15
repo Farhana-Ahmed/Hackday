@@ -2,6 +2,7 @@ import "./App.css";
 import { useState, useEffect, useCallback } from "react";
 import RecipeCard from "./components/RecipeCard/RecipeCard";
 import NewRecipeForm from "./components/NewRecipe/NewRecipeForm";
+import { ToastContainer } from "react-toastify";
 
 function App() {
   const [searchTerm, setSearchTerm] = useState("");
@@ -15,19 +16,9 @@ function App() {
         `http://localhost:3001/api/search/${searchTerm}?page=${currentPage}`
       );
 
-      // const recipesFound = results.filter(async (recipe) =>
-      //   recipe.title.toLowerCase().includes(searchTerm.toLowerCase())
-      // );
       const data = await response.json();
       setRecipes(data.data);
       setPagination(data.pagination);
-      // if (recipesFound.length > 0) {
-      //   console.log("search term is present");
-      //   setRecipes(recipesFound);
-      // } else {
-      //   console.log("No matching recipe found");
-      //   setRecipes([]);
-      // }
     } catch (error) {
       console.log("Error fetching data", error);
     }
@@ -79,6 +70,7 @@ function App() {
         </div>
         <NewRecipeForm />
       </header>
+      <ToastContainer />
     </div>
   );
 }

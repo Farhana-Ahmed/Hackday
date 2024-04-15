@@ -1,5 +1,7 @@
 import React, { useState } from "react";
-
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import "./NewRecipeForm.css";
 const NewRecipeForm = () => {
   const [formData, setFormData] = useState({
     title: "",
@@ -7,6 +9,7 @@ const NewRecipeForm = () => {
     servings: "",
     instructions: "",
   });
+  const [errorMessage, setErrorMessage] = useState("");
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -19,21 +22,28 @@ const NewRecipeForm = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await fetch("/api/recipes", {
+      const response = await fetch("http://localhost:3001/api/recipes", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
         body: JSON.stringify(formData),
       });
+      if (!response.ok) {
+        throw new Error(`HTTP error! Status: ${response.status}`);
+      }
       const data = await response.json();
       console.log("Recipe Saved", data);
+      toast.success("Recipe added successfully");
     } catch (error) {
       console.log("Error savin rcipe ", error);
+      setErrorMessage("Error saving recipe. Please try again later.");
+      toast.error("Error saving recipe. Please try again later");
     }
   };
   return (
-    <div>
+    <div className="new-recipe-form">
+      {errorMessage && <p>{errorMessage}</p>}
       <form onSubmit={handleSubmit}>
         <label htmlFor="title">Title:</label>
         <input
