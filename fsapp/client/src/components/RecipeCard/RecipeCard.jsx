@@ -1,5 +1,5 @@
 import React from "react";
-// import { Link } from "react-router-dom";
+import { Link } from "react-router-dom";
 import "./RecipeCard.css";
 
 const RecipeCard = ({ recipe }) => {
@@ -13,8 +13,10 @@ const RecipeCard = ({ recipe }) => {
       <div className="recipe-card-body">
         <h2>{recipe["title"]}</h2>
         <p>{recipe["instructions"]}</p>
+        <Link to={`/recipes/${recipe._id}`} className="btn btn-primary">
+          View Details
+        </Link>
       </div>
-      {/* </Link> */}
     </div>
   );
 };

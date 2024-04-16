@@ -7,7 +7,8 @@ const RecipeDetails = () => {
     const fetchRecipe = async () => {
       try {
         const response = await fetch(`http://localhost:3001/api/recipes/${id}`);
-        setRecipe(response.data);
+        const data = await response.json();
+        setRecipe(data);
       } catch (error) {
         console.log("Error fetching recipe", error);
       }

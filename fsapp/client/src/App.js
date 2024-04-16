@@ -2,6 +2,8 @@ import "./App.css";
 import { useState, useEffect, useCallback } from "react";
 import RecipeCard from "./components/RecipeCard/RecipeCard";
 import NewRecipeForm from "./components/NewRecipe/NewRecipeForm";
+import { BrowserRouter, Route, Routes, Link, Router } from "react-router-dom";
+import RecipeDetails from "./components/RecipeDetails/RecipeDetails";
 
 function App() {
   const [searchTerm, setSearchTerm] = useState("");
@@ -41,35 +43,42 @@ function App() {
     setCurrentPage(pagination.prev.page);
   };
   return (
-    <div className="app">
-      <header className="App-header">
-        <h1>Craving for something yummy?😋</h1>
-        <form className="app__searchForm" onSubmit={handleSubmit}>
-          <input
-            className="text-input"
-            type="text-input"
-            placeholder="search for recipe"
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-          />
-          <input className="app__submit" type="submit" value="Search" />
-        </form>
-        <div className="app__recipes">
-          {recipes.map((recipe, index) => {
-            return <RecipeCard recipe={recipe} key={index} />;
-          })}
-        </div>
-        <div>
-          {pagination.prev && (
-            <button onClick={handlePrevPage}>Previous Page</button>
-          )}
-          {pagination.next && (
-            <button onClick={handleNextPage}>Next Page</button>
-          )}
-        </div>
-        <NewRecipeForm />
-      </header>
-    </div>
+    <BrowserRouter>
+      <div className="app">
+        <header className="App-header">
+          <h1>Craving for something yummy?😋</h1>
+          <form className="app__searchForm" onSubmit={handleSubmit}>
+            <input
+              className="text-input"
+              type="text-input"
+              placeholder="search for recipe"
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+            />
+            <input className="app__submit" type="submit" value="Search" />
+          </form>
+          <div className="app__recipes">
+            {recipes.map((recipe, index) => {
+              return <RecipeCard recipe={recipe} key={index} />;
+            })}
+          </div>
+          <div>
+            {pagination.prev && (
+              <button onClick={handlePrevPage}>Previous Page</button>
+            )}
+            {pagination.next && (
+              <button onClick={handleNextPage}>Next Page</button>
+            )}
+          </div>
+          <NewRecipeForm />
+        </header>
+      </div>
+      <Routes>
+        {/* <Route path="/" element={<RecipeCard />} /> */}
+
+        <Route path="/recipes/:id" element={<RecipeDetails />} />
+      </Routes>
+    </BrowserRouter>
   );
 }
 
