@@ -4,7 +4,7 @@ import RecipeCard from "./components/RecipeCard/RecipeCard";
 import NewRecipeForm from "./components/NewRecipe/NewRecipeForm";
 import { BrowserRouter, Route, Routes, Link, Router } from "react-router-dom";
 import RecipeDetails from "./components/RecipeDetails/RecipeDetails";
-
+import Home from "./components/Home/Home";
 function App() {
   const [searchTerm, setSearchTerm] = useState("");
   const [recipes, setRecipes] = useState([]);
@@ -75,7 +75,7 @@ function App() {
       </div>
       <Routes>
         {/* <Route path="/" element={<RecipeCard />} /> */}
-
+        {/* <Route exact path="/" element={<Home />} /> */}
         <Route path="/recipes/:id" element={<RecipeDetails />} />
       </Routes>
     </BrowserRouter>

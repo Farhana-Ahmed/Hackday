@@ -150,4 +150,22 @@ router.get("/recipes/:id", async (req, res) => {
   }
 });
 
+//updating a recipe by ID
+router.put("/recipes/:id", async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { title, servings, ingredients, instructions } = req.body;
+
+    const updatedRecipe = await itemModel.findByIdAndUpdate(
+      id,
+      { title, ingredients, servings, instructions },
+      { new: true }
+    );
+
+    res.status(200).json(updatedRecipe);
+  } catch (error) {
+    console.error("Error updating recipe", error);
+    res.status(500).json({ error: "Error updating recipe" });
+  }
+});
 module.exports = router;
