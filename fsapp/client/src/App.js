@@ -2,7 +2,6 @@ import "./App.css";
 import { useState, useEffect, useCallback } from "react";
 import RecipeCard from "./components/RecipeCard/RecipeCard";
 import NewRecipeForm from "./components/NewRecipe/NewRecipeForm";
-import { ToastContainer } from "react-toastify";
 
 function App() {
   const [searchTerm, setSearchTerm] = useState("");
@@ -26,7 +25,7 @@ function App() {
 
   useEffect(() => {
     getResultsFromDb();
-  }, [searchTerm, currentPage, getResultsFromDb]);
+  }, [getResultsFromDb]);
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -70,7 +69,6 @@ function App() {
         </div>
         <NewRecipeForm />
       </header>
-      <ToastContainer />
     </div>
   );
 }
