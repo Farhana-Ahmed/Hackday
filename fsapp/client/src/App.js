@@ -5,6 +5,8 @@ import NewRecipeForm from "./components/NewRecipe/NewRecipeForm";
 import { BrowserRouter, Route, Routes, Link, Router } from "react-router-dom";
 import RecipeDetails from "./components/RecipeDetails/RecipeDetails";
 import Home from "./components/Home/Home";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 function App() {
   const [searchTerm, setSearchTerm] = useState("");
   const [recipes, setRecipes] = useState([]);
@@ -78,6 +80,7 @@ function App() {
         {/* <Route exact path="/" element={<Home />} /> */}
         <Route path="/recipes/:id" element={<RecipeDetails />} />
       </Routes>
+      <ToastContainer />
     </BrowserRouter>
   );
 }

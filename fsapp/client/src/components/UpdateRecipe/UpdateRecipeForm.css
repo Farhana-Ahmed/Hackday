@@ -1,0 +1,33 @@
+.update-recipe-form {
+  max-width: 600px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+.update-recipe-form label,
+.update-recipe-form input,
+.update-recipe-form textarea,
+.update-recipe-form button {
+  display: block;
+  width: 100%;
+  margin-bottom: 10px;
+  box-sizing: border-box;
+}
+
+.update-recipe-form button {
+  background-color: #4caf50;
+  color: white;
+  padding: 10px;
+  border: none;
+  cursor: pointer;
+}
+
+@media (max-width: 768px) {
+  .new-recipe-form {
+    padding: 10px;
+  }
+
+  .new-recipe-form button {
+    padding: 6px;
+  }
+}
